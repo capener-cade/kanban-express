@@ -1,0 +1,8 @@
+[
+    {
+        "id": 1,
+        "title": "my first card",
+        "board_id": 1,
+        "column" : "backlog"
+    }
+]
