@@ -1,8 +1,42 @@
 [{
     "id": 1,
     "name": "First Board",
-    "backlog": [],
-    "toDo": [],
-    "doing": [],
-    "done": []
+    "cards":[
+        {
+            "id":1,
+            "column": "ToDo",
+            "title": "Connect to Server"
+        },
+        {
+            "id":2,
+            "column": "ToDo",
+            "title": "Prosper"
+        },
+        {
+            "id":3,
+            "column": "ToDo",
+            "title": "Set Up DB"
+        }
+    ]
+},
+{
+    "id": 2,
+    "name": "Second Board",
+    "cards":[
+        {
+            "id":1,
+            "column": "ToDo",
+            "title": "Connect to Server"
+        },
+        {
+            "id":2,
+            "column": "ToDo",
+            "title": "Prosper"
+        },
+        {
+            "id":3,
+            "column": "ToDo",
+            "title": "Set Up DB"
+        }
+    ]
 }]

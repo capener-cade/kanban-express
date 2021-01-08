@@ -1,26 +1,28 @@
 import express from 'express';
-const users = require('../data/users.json') 
+import MiddlewareFn from './types'
+const board = require('../data/boards.json') 
 
 const port = 3001;
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 app.get('/', (req, res) => res.send('success'));
-app.get('/api/user/:id', (req, res) => res.send(users[req.params.id].firstName));
-app.get('/api/boards', (req, res) => res.send('board was hit'));
-app.get('/api/card', (req, res) => res.send('card success'));
+app.get('/api/ping',(req, res) => res.send('success'))
+app.get('/api/board/:id', (req, res) => res.send(board[req.params.id]));
 
-app.post('api/user', (req,res) => res.send('create a user'));
-app.post('/api/boards', (req, res) => res.send('create a single board'));
-app.post('/api/card', (req, res) => res.send('create a single card'));
+app.put('/api/board/:id', (req,res)=> {
+  return res.status(201).send(`user ${req.params.id} was updated`);
+});
 
-app.put('api/board/:id'), (res: { send: (arg0: string) => any; }) => res.send('update a board');
-app.put('api/card/:id'), (res: { send: (arg0: string) => any; }) => res.send('update a single card');
-
-app.delete('api/board/:id'), (res: { send: (arg0: string) => any; }) => res.send('delete a board');
-app.delete('api/card/:id'), (res: { send: (arg0: string) => any; }) => res.send('delete a single card');
+app.delete('/api/board/:id/:cardTitle', (req,res)=> {
+  return res.status(201).send(`card ${req.params.cardTitle} was deleted`);
+})
 
 
 app.listen(port)
