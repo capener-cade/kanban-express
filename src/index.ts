@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import 'dotenv/config';
-import Card from '../model/card';
+import Card from "./model/card"
 
 const port = 3001;
 
@@ -16,6 +16,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
+  console.log(`${req.method} ${req.originalUrl}`);
   next();
 });
 
@@ -28,9 +31,13 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING!,
 app.get('/', (req, res) => res.send('success'));
 app.get('/api/ping', (req, res) => res.send('success'));
 // grab a board from the db.
-app.get('/api/board/:id', (req, res) => res.send());
+app.get('/api/board/:id/cards', async (req, res) => {
+  const cards = await Card.find({ boardId: req.params.id });
+  res.send(cards);
+});
 
-app.post('/api/board/:id', async (req, res) => {
+app.post('/api/board/:id/cards', async (req, res) => {
+  // validate the data that goes into the db.
   try {
     const newCard = new Card(req.body);
     await newCard.save();
@@ -40,7 +47,16 @@ app.post('/api/board/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/board/:id/', (req, res) => res.status(201).send(`card ${req.params.cardTitle} was deleted`));
+app.delete('/api/board/:boardId/:cardId', async (req, res) => {
+  try {
+    console.log(req.params.boardId);
+    console.log(req.params.cardId);
+    await Card.deleteOne({ _id: req.params.cardId });
+    res.sendStatus(204);
+  } catch (err) {
+    res.send({ message: err });
+  }
+});
 
 app.listen(port)
   .once('listening', () => {
