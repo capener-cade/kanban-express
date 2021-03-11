@@ -10,7 +10,9 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc -p .",
-    "start": "yarn build && node out/index.js",
+    "docker:start": "docker-compose up -d",
+    "docker:stop": "docker-compose stop",
+    "start": "yarn build && yarn docker:start && node out/index.js",
     "tdd": "jest --watch",
     "test": "jest"
   },
