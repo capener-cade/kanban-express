@@ -22,40 +22,12 @@ app.use((req, res, next) => {
   next();
 });
 
-<<<<<<< HEAD
-// const connectDB = async () => {
-//   try {
-//     await mongoose.connect(process.env.MONGO_CONNECTION_STRING!, {
-//       useNewUrlParser: true,
-//       useUnifiedTopology: true,
-//     });
-
-//     console.log("DB Connected");
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
-
-// connectDB();
-
-// const mongoURI = process.env.MONGO_URI || "";
-const mongoURI = "mongodb+srv://cadec:<password>@cluster0.riixd.mongodb.net/kanban_db?retryWrites=true&w=majority";
-const mongoAuth = encodeURIComponent(process.env.MONGO_AUTH || "");
-const mongoConnectionString = mongoURI.replace("<password>", mongoAuth);
-console.log("mongoConnectionString", mongoConnectionString);
-mongoose.connect(mongoConnectionString, { useUnifiedTopology: true, useNewUrlParser: true }, (err) => {
-  if (err) console.log("oh no its broke", err);
-  console.log("Connected to the DB");
-});
-
-=======
 //TODO:move back to .env file
 mongoose.connect("mongodb://localhost:27018/kanban", { useUnifiedTopology: true, useNewUrlParser: true }, (err) => {
   if (err) console.log("oh no", err);
   console.log("Connected to the DB");
 });
 
->>>>>>> 77e141e774e2591eb743ce87d5ce4ed6a3ed0f7a
 app.get("/", (req, res) => res.send("success"));
 app.get("/api/ping", (req, res) => res.send("success"));
 // grab a board from the db.
