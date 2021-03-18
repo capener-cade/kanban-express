@@ -22,6 +22,7 @@ app.use((req, res, next) => {
   next();
 });
 
+<<<<<<< HEAD
 // const connectDB = async () => {
 //   try {
 //     await mongoose.connect(process.env.MONGO_CONNECTION_STRING!, {
@@ -47,6 +48,14 @@ mongoose.connect(mongoConnectionString, { useUnifiedTopology: true, useNewUrlPar
   console.log("Connected to the DB");
 });
 
+=======
+//TODO:move back to .env file
+mongoose.connect("mongodb://localhost:27018/kanban", { useUnifiedTopology: true, useNewUrlParser: true }, (err) => {
+  if (err) console.log("oh no", err);
+  console.log("Connected to the DB");
+});
+
+>>>>>>> 77e141e774e2591eb743ce87d5ce4ed6a3ed0f7a
 app.get("/", (req, res) => res.send("success"));
 app.get("/api/ping", (req, res) => res.send("success"));
 // grab a board from the db.
