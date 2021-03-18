@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const Card = new mongoose.Schema({
   boardId: Number,
@@ -6,4 +6,4 @@ const Card = new mongoose.Schema({
   title: String,
 });
 
-export default mongoose.model('card', Card);
+export default mongoose.model("card", Card);
