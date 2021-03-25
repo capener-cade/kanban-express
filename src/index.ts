@@ -54,7 +54,18 @@ app.post("/api/board/:id/cards", async (req, res) => {
 app.put("/api/board/:boardId/:cardId", async (req, res) => {
   try {
     await Card.findByIdAndUpdate(req.params.cardId, { column: req.body.column });
-    console.log(req.body.column);
+    res.sendStatus(204);
+  } catch (err) {
+    res.send({ message: err });
+  }
+});
+
+app.put("/api/card/:boardId/:cardId", async (req, res) => {
+  try {
+    await Card.findOneAndUpdate(
+      { _id: req.params.cardId },
+      { title: req.body.title, description: req.body.description }
+    );
     res.sendStatus(204);
   } catch (err) {
     res.send({ message: err });
