@@ -33,15 +33,29 @@ app.get("/api/ping", (req, res) => res.send("success"));
 // grab a board from the db.
 app.get("/api/board/:id/cards", async (req, res) => {
   const cards = await Card.find({ boardId: req.params.id });
+  console.log(cards);
   res.send(cards);
 });
 
 app.post("/api/board/:id/cards", async (req, res) => {
   // validate the data that goes into the db.
+  if (!req.body.boardId) {
+    return res.status(400).send("boardId is required");
+  }
   try {
     const newCard = new Card(req.body);
     await newCard.save();
     res.send(newCard);
+  } catch (err) {
+    res.send({ message: err });
+  }
+});
+
+app.put("/api/board/:boardId/:cardId", async (req, res) => {
+  try {
+    await Card.findByIdAndUpdate(req.params.cardId, { column: req.body.column });
+    console.log(req.body.column);
+    res.sendStatus(204);
   } catch (err) {
     res.send({ message: err });
   }
