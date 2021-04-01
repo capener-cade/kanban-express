@@ -31,13 +31,13 @@ mongoose.connect("mongodb://localhost:27018/kanban", { useUnifiedTopology: true,
 app.get("/", (req, res) => res.send("success"));
 app.get("/api/ping", (req, res) => res.send("success"));
 // grab a board from the db.
-app.get("/api/board/:id/cards", async (req, res) => {
+app.get("/api/boards/:id/cards", async (req, res) => {
   const cards = await Card.find({ boardId: req.params.id });
   console.log(cards);
   res.send(cards);
 });
 
-app.post("/api/board/:id/cards", async (req, res) => {
+app.post("/api/boards/:id/cards", async (req, res) => {
   // validate the data that goes into the db.
   if (!req.body.boardId) {
     return res.status(400).send("boardId is required");
@@ -51,28 +51,21 @@ app.post("/api/board/:id/cards", async (req, res) => {
   }
 });
 
-app.put("/api/board/:boardId/:cardId", async (req, res) => {
+app.put("/api/boards/:boardId/cards/:cardId", async (req, res) => {
+  const card = {
+    column: req.body.column,
+    title: req.body.title,
+    description: req.body.description,
+  };
   try {
-    await Card.findByIdAndUpdate(req.params.cardId, { column: req.body.column });
+    await Card.updateOne({ _id: req.params.cardId }, card);
     res.sendStatus(204);
   } catch (err) {
     res.send({ message: err });
   }
 });
 
-app.put("/api/card/:boardId/:cardId", async (req, res) => {
-  try {
-    await Card.findOneAndUpdate(
-      { _id: req.params.cardId },
-      { title: req.body.title, description: req.body.description }
-    );
-    res.sendStatus(204);
-  } catch (err) {
-    res.send({ message: err });
-  }
-});
-
-app.delete("/api/board/:boardId/:cardId", async (req, res) => {
+app.delete("/api/boards/:boardId/cards/:cardId", async (req, res) => {
   try {
     console.log(req.params.boardId);
     console.log(req.params.cardId);
