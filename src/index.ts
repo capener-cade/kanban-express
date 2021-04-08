@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import "dotenv/config";
 import Card from "./model/card";
+import Board from "./model/board";
 
 const port = 3001;
 
@@ -30,11 +31,29 @@ mongoose.connect("mongodb://localhost:27018/kanban", { useUnifiedTopology: true,
 
 app.get("/", (req, res) => res.send("success"));
 app.get("/api/ping", (req, res) => res.send("success"));
+app.get("/api/boards", async (req, res) => {
+  const boards = await Board.find();
+  res.send(boards);
+});
 // grab a board from the db.
 app.get("/api/boards/:id/cards", async (req, res) => {
   const cards = await Card.find({ boardId: req.params.id });
   console.log(cards);
   res.send(cards);
+});
+
+app.post("/api/boards", async (req, res) => {
+  // validate the data that goes into the db.
+  if (!req.body.title) {
+    return res.status(400).send("title is required");
+  }
+  try {
+    const newBoard = new Board(req.body);
+    await newBoard.save();
+    res.send(newBoard);
+  } catch (err) {
+    res.send({ message: err });
+  }
 });
 
 app.post("/api/boards/:id/cards", async (req, res) => {
@@ -50,7 +69,6 @@ app.post("/api/boards/:id/cards", async (req, res) => {
     res.send({ message: err });
   }
 });
-
 app.put("/api/boards/:boardId/cards/:cardId", async (req, res) => {
   const card = {
     column: req.body.column,
