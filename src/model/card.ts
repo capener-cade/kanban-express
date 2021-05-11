@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
 const Card = new mongoose.Schema({
-  boardId: { type: Number, required: true },
+  boardId: { type: mongoose.Schema.Types.ObjectId, required: true },
   column: { type: String, required: true, enum: ["Backlog", "ToDo", "Doing", "Done"] },
   title: String,
   description: String,
