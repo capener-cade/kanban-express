@@ -6,6 +6,12 @@ const createBoard = async (req: any) => {
   return response;
 };
 
+const getBoards = async () => {
+  const boardList = await boardModel.find();
+  return boardList;
+};
+
 export default {
   createBoard,
+  getBoards,
 };

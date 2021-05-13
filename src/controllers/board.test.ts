@@ -2,14 +2,14 @@ import boardController from "./board";
 import boardModel from "../model/board";
 
 describe("board controller", () => {
+  const newBoard = { title: "new board" };
+
   describe("create board", () => {
-    const newBoard = { title: "new board" };
     beforeEach(() => {
       jest.spyOn(boardModel.prototype, "save").mockImplementation(() => newBoard);
     });
 
     afterEach(() => {
-      // boardModel.prototype.restore();
       jest.restoreAllMocks();
     });
 
@@ -24,7 +24,31 @@ describe("board controller", () => {
 
     it("should return the new board", async () => {
       const response = await boardController.createBoard({ body: newBoard });
-      expect(response).toBe(newBoard);
+      expect(response).toStrictEqual(newBoard);
+    });
+  });
+
+  describe("get all board", () => {
+    beforeEach(() => {
+      jest.spyOn(boardModel, "find").mockImplementation(() => [newBoard as any, newBoard as any] as any);
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it("should be a function", () => {
+      expect(typeof boardController.getBoards === "function").toBeTruthy();
+    });
+
+    it("should search the database for all boards", async () => {
+      await boardController.getBoards();
+      expect(boardModel.find).toHaveBeenCalled();
+    });
+
+    it("should return a list of boards", async () => {
+      const response = await boardController.getBoards();
+      expect(response).toStrictEqual([newBoard, newBoard]);
     });
   });
 });
