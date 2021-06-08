@@ -83,9 +83,18 @@ describe("board controller", () => {
 
   describe("update a board", () => {
     beforeEach(() => {
-      jest.spyOn(boardModel, "updateOne").mockImplementation(() => newBoard as any);
+      jest.spyOn(boardModel, "findById").mockResolvedValue(new boardModel({ title: "" }));
       boardModel.prototype.save = jest.fn();
+      // jest.spyOn(boardModel.prototype, "save")
+      // boardModel.prototype.save = jest.fn((args) => {
+      //   console.log(args);
+      //   return args;
+      // });
     });
+
+    // beforeEach(() => {
+    //   jest.spyOn(boardModel.prototype, "save").mockImplementation(() => newBoard);
+    // });
 
     afterEach(() => {
       jest.restoreAllMocks();
@@ -95,17 +104,16 @@ describe("board controller", () => {
       expect(typeof boardController.updateBoard === "function").toBeTruthy();
     });
 
-    it("should call updateOne", async () => {
+    it("should find a board", async () => {
       const newBoardTitle = "newlyUpdatedBoard";
       await boardController.updateBoard(id, newBoardTitle);
-      expect(boardModel.updateOne).toHaveBeenCalledWith({}, { $set: { title: newBoardTitle } });
+      expect(boardModel.findById).toHaveBeenCalledWith(id);
     });
 
     it("should return the updated the board", async () => {
       const newBoardTitle = "newlyUpdatedBoard";
       const updatedBoard = await boardController.updateBoard(id, newBoardTitle);
-      console.log("test updatedBoard", updatedBoard);
-      expect(updatedBoard).toEqual({ title: "newlyUpdatedBoard" });
+      expect(updatedBoard.title).toEqual("newlyUpdatedBoard");
     });
 
     // describe("when the board does not exist", () => {

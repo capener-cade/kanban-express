@@ -22,9 +22,10 @@ const getSingleBoard = async (id: Types.ObjectId) => {
 };
 
 const updateBoard = async (id: Types.ObjectId, newBoardTitle: any) => {
-  const board = await boardModel.updateOne({}, { $set: { title: newBoardTitle } });
+  const board = await boardModel.findById(id);
   if (!board) throw new Error("board does not exist");
-  console.log("controller board", board);
+  board.title = "newlyUpdatedBoard";
+  await board.save();
   return board;
 };
 
