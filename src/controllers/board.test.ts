@@ -131,7 +131,33 @@ describe("board controller", () => {
     // });
   });
 
-  // describe("delete a board", () => {
-  //   console.log("delete was hit");
-  // });
+  describe("delete a board", () => {
+    beforeEach(() => {
+      jest.spyOn(boardModel, "findById").mockResolvedValue(new boardModel({ title: "" }));
+      boardModel.prototype.save = jest.fn();
+    });
+
+    beforeEach(() => {
+      jest.spyOn(boardModel, "deleteOne").mockResolvedValue({});
+      boardModel.prototype.save = jest.fn();
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it("should be a function", () => {
+      expect(typeof boardController.deleteBoard === "function").toBeTruthy();
+    });
+
+    it("should find a board", async () => {
+      const newBoardTitle = "newlyUpdatedBoard";
+      await boardController.updateBoard(id, newBoardTitle);
+      expect(boardModel.findById).toHaveBeenCalledWith(id);
+    });
+
+    it("should delete a board", async () => {
+      await boardController.deleteBoard(id);
+      expect(boardModel.deleteOne).toHaveBeenCalledWith(id);
+    });
+  });
 });
