@@ -33,9 +33,9 @@ describe("board controller", () => {
     });
   });
 
-  describe("get all board", () => {
+  describe("get all boards", () => {
     beforeEach(() => {
-      jest.spyOn(boardModel, "find").mockImplementation(() => [newBoard as any, newBoard as any] as any);
+      jest.spyOn(boardModel, "find").mockImplementation(() => [newBoard, newBoard] as any);
     });
 
     afterEach(() => {
@@ -85,16 +85,7 @@ describe("board controller", () => {
     beforeEach(() => {
       jest.spyOn(boardModel, "findById").mockResolvedValue(new boardModel({ title: "" }));
       boardModel.prototype.save = jest.fn();
-      // jest.spyOn(boardModel.prototype, "save")
-      // boardModel.prototype.save = jest.fn((args) => {
-      //   console.log(args);
-      //   return args;
-      // });
     });
-
-    // beforeEach(() => {
-    //   jest.spyOn(boardModel.prototype, "save").mockImplementation(() => newBoard);
-    // });
 
     afterEach(() => {
       jest.restoreAllMocks();
@@ -134,10 +125,6 @@ describe("board controller", () => {
   describe("delete a board", () => {
     beforeEach(() => {
       jest.spyOn(boardModel, "findById").mockResolvedValue(new boardModel({ title: "" }));
-      boardModel.prototype.save = jest.fn();
-    });
-
-    beforeEach(() => {
       jest.spyOn(boardModel, "deleteOne").mockResolvedValue({});
       boardModel.prototype.save = jest.fn();
     });
@@ -145,6 +132,7 @@ describe("board controller", () => {
     afterEach(() => {
       jest.restoreAllMocks();
     });
+
     it("should be a function", () => {
       expect(typeof boardController.deleteBoard === "function").toBeTruthy();
     });

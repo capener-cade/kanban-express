@@ -1,36 +1,31 @@
-import { FilterQuery, Document, Types, UpdateQuery } from "mongoose";
-import boardModel from "../model/board";
+import { Types } from "mongoose";
+import boardModel, { IBoardModel } from "../model/board";
 
-interface IBoard {
-  title: string;
-}
-
-const createBoard = async (req: any) => {
+const createBoard = async (req: any): Promise<IBoardModel> => {
   const newBoard = new boardModel(req.body);
   const response = await newBoard.save();
   return response;
 };
 
-const getBoards = async () => {
+const getBoards = async (): Promise<IBoardModel[]> => {
   const boardList = await boardModel.find();
   return boardList;
 };
 
-const getSingleBoard = async (id: Types.ObjectId) => {
+const getSingleBoard = async (id: Types.ObjectId): Promise<IBoardModel | null> => {
   const board = await boardModel.findOne({ _id: id });
   return board;
 };
 
-const updateBoard = async (id: Types.ObjectId, newBoardTitle: any) => {
+const updateBoard = async (id: Types.ObjectId, newBoardTitle: string): Promise<IBoardModel> => {
   const board = await boardModel.findById(id);
   if (!board) throw new Error("board does not exist");
-  board.title = "newlyUpdatedBoard";
+  board.title = newBoardTitle;
   await board.save();
   return board;
 };
 
-const deleteBoard = async (id: Types.ObjectId) => {
-  console.log(id);
+const deleteBoard = async (id: Types.ObjectId): Promise<void> => {
   await boardModel.deleteOne(id);
 };
 
