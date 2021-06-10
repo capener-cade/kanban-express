@@ -29,8 +29,9 @@ const updateBoard = async (id: Types.ObjectId, newBoardTitle: any) => {
   return board;
 };
 
-const deleteBoard = async (req: any) => {
-  await boardModel.deleteOne(req);
+const deleteBoard = async (id: Types.ObjectId) => {
+  console.log(id);
+  await boardModel.deleteOne(id);
 };
 
 export default {
